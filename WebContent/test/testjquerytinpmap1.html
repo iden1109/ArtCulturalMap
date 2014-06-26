@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Test jQuery tinyMap 2</title>
+	<style type="text/css">
+		.map { width:100%; height:700px; background:#f0f0f0; color:#000000}
+		.map img { max-width:none; height:auto; border:0; -ms-interpolation-mode:bicubic}
+		.label{font-size:16px;background:rgba(22,22,22,0.6);color:#fff;padding:.25em}
+    </style>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3TI_aOEP-JWo7bEI4NzLaU8U_BofxJpk&sensor=false"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	<script type="text/javascript" src="../script/jquery.tinyMap-2.5.2.min.js"></script>
+	
+	<script type="text/javascript">
+		$(function () {
+		    $('#map1').tinyMap({
+		    	center: {x:'23.5', y:'121'},
+		    	zoom:9,
+		        mapTypeId: 'roadmap',//hybrid
+		        marker: [
+					{addr: ['25.039065815333753', '121.56097412109375'], text: '110台灣台北市信義區逸仙路28號'},
+					{addr: ['25.04151536540612', '121.56354904174805'], text: '110台灣台北市信義區忠孝東路四段559巷8號'},
+					{addr: ['25.041282077030896', '121.56741142272949'], text: '110台灣台北市信義區忠孝東路五段131號'},
+					{addr: ['25.0383270525352', '121.57045841217041'], text: '110台灣台北市信義區松高路68號'},
+					{addr: ['25.034516521123315','121.56496524810791'], text: '110台灣台北市信義區台北101', label:'台北101', css:'label'},
+		        ],
+		        markerFitBounds: true
+		    });
+		    
+		    $('#map1').tinyMap({
+		        marker: [
+		            {addr: ['25.037467', '121.564077'], text: '台北市政府', label: '政鋊-台北市政府', css:'label'},
+		            {addr: ['25.100295', '121.549494'], text: '國立故宮博物院', label: '政鋊-故宮博物院', css:'label', icon: '4.png'}
+		        ]
+		    });
+			
+		});
+		
+	</script>
+</head>
+<body>
+	<div id="map1" class="map"></div>
+</body>
+</html>

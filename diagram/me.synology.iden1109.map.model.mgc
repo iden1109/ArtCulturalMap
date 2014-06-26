@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassDiagram>
+    <Class name="me.synology.iden1109.map.model.EventIndex" x="528" y="202">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association
+            destinationClassName="me.synology.iden1109.map.model.EventIndex.Category"
+            endpointName="category" kind="Simple"/>
+        <Communication destinationClassName="me.synology.iden1109.map.model.EventIndex.Category"/>
+    </Class>
+    <Class name="me.synology.iden1109.map.model.EventComponent" x="149" y="-2">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="me.synology.iden1109.map.model.EventJSON" x="721" y="0">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association
+            destinationClassName="me.synology.iden1109.map.model.EventItemJSON"
+            endpointName="showinfo" kind="Simple"/>
+    </Class>
+    <Class name="me.synology.iden1109.map.model.EventItem" x="241" y="201">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="me.synology.iden1109.map.model.EventComponent"/>
+        <Association
+            destinationClassName="me.synology.iden1109.map.model.UId"
+            endpointName="uid" kind="Simple"/>
+        <Communication destinationClassName="me.synology.iden1109.map.model.UId"/>
+    </Class>
+    <Class name="me.synology.iden1109.map.model.UId" x="198" y="486">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="me.synology.iden1109.map.model.Event" x="37" y="200">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="me.synology.iden1109.map.model.EventComponent"/>
+        <Association
+            destinationClassName="me.synology.iden1109.map.model.UId"
+            endpointName="uid" kind="Simple"/>
+        <Association
+            destinationClassName="me.synology.iden1109.map.model.EventComponent"
+            endpointName="components" kind="Simple"/>
+        <Communication destinationClassName="me.synology.iden1109.map.model.EventComponent"/>
+        <Communication destinationClassName="me.synology.iden1109.map.model.UId"/>
+    </Class>
+    <Class name="me.synology.iden1109.map.model.EventItemJSON" x="734" y="467">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="me.synology.iden1109.map.model.AddressJSON" x="561" y="487">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="me.synology.iden1109.map.model.EventIndex.Category"
+        x="568" y="344">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+</ClassDiagram>

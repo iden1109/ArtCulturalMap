@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="BIG5">
+<title>test1</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+</head>
+<body>
+	<p>Hi, I am the DOM! Script away!</p>
+	<a></a>
+	<script>
+		(function ($) {
+			$('a').text('jQuery').attr('href', 'http://www.jquery.com/').addClass('jQuery'); 
+		})(jQuery)
+	</script>
+	<style>
+		.last
+		{
+		background: #900;
+		}
+	</style>
+	
+	<ul id="list">
+		<li></li>
+		<li>
+			<ul>
+				<li></li>
+				<li></li>
+				<li></li>
+			</ul>
+		</li>
+		<li></li>
+		<li></li>
+	</ul>
+	<script> (function ($) {
+		$('#list')
+			.find('> li')
+				.filter(':last')
+					.addClass('last')
+				.end()
+				.find('ul')
+					.css('background', '#ccc')
+					.find('li:last')
+						.addClass('last')
+					.end()
+				.end()
+			.end()
+				.append('I am an &lt;li&gt;');
+	})(jQuery); </script>
+	
+	<a id="link1">jQuery.com</a>
+	<a id="link2">jQuery.com</a>
+	<a id="link3">jQuery.com</a>
+	
+	<script> 
+		(function ($){
+			$('a').mouseenter(
+			function () { alert(this.id); });
+		})(jQuery);
+	</script>
+</body>
+</html>

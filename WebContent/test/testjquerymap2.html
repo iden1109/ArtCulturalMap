@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<meta name="keywords" content="Google maps, jQuery, plugin" />
+	<meta name="description" content="Performing map for Taiwan" />
+	<title>Test jQuery Map2</title>
+	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/ui-lightness/jquery-ui.css" />
+   	<style type="text/css">
+		.map {
+			width:100%; 
+			height:650px; 
+			background:#f0f0f0; 
+			color:#000000
+		}
+		.map img { 
+			max-width:none; 
+			height:auto; 
+			border:0; 
+			-ms-interpolation-mode:bicubic
+		}
+		.label{
+			font-size:16px;
+			background:rgba(22,22,22,0.6);
+			color:#fff;padding:.25em
+		}
+		.noscrollbar {
+			line-height:1.35;
+			overflow:hidden;
+			white-space:nowrap;
+		}
+		.nodisplay { display: none; }
+		.display { display: block; }
+
+		input.text { margin-bottom:12px; width:95%; padding: .4em; }
+		fieldset { padding:0; border:0; margin-top:25px; }
+		h1 { font-size: 1.2em; margin: .6em 0; }
+		div#usersContain { width: 350px; margin: 20px 0; }
+		div#usersContain table { margin: 1em 0; border-collapse: collapse; width: 100%; }
+		div#usersContain table td, div#usersContain table th { border: 1px solid #eee; padding: .6em 10px; text-align: left; }
+		.ui-dialog .ui-state-error { padding: .3em; }
+		.validateTips { border: 1px solid transparent; padding: 0.3em; }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3TI_aOEP-JWo7bEI4NzLaU8U_BofxJpk&sensor=true" type="text/javascript"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js" type="text/javascript"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.js" type="text/javascript"></script>
+	<script src="../script/jqueryuimap/markerclusterer.js" type="text/javascript"></script>
+	<script src="../script/jqueryuimap/jquery.ui.map.js" type="text/javascript"></script>
+	<script src="../script/jqueryuimap/jquery.ui.map.services.js" type="text/javascript"></script>
+	<script src="../script/jqueryuimap/jquery.ui.map.overlays.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		$(document).ready(function () {
+			var name = $( "#name" );
+			var email = $( "#email" );
+			var password = $( "#password" );
+			var allFields = $([]).add(name).add(email).add(password);
+			var tips = $( ".validateTips" );
+			
+			//open dialog
+			function openDialogbyMarker(map, marker) {
+				map.panTo($(marker).get(0).getPosition()); //move position to center
+				//window.console.log("openDialog() marker --> " + $(marker) + "  " + $(marker).attr('id') + " "+ $(marker).get(0).getPosition());
+				$('#dialogWin').dialog({
+					'modal' : true,
+					'width' : 600,
+					//'height': 600, 
+					'title': $(marker).attr('title'), 
+					//'resizable': false, 
+					//'draggable': false, 
+					'buttons' : {
+						'Ok' : function() {
+							
+							var bValid = true;
+							allFields.removeClass( "ui-state-error" );
+							
+							bValid = bValid && checkLength( name, "username", 3, 16 );
+							bValid = bValid && checkLength( email, "email", 6, 80 );
+							bValid = bValid && checkLength( password, "password", 5, 16 );
+							
+							bValid = bValid && checkRegexp( name, /^[a-z]([0-9a-z_])+$/i, "Username may consist of a-z, 0-9, underscores, begin with a letter." );
+							// From jquery.validate.js (by joern), contributed by Scott Gonzalez: http://projects.scottsplayground.com/email_address_validation/
+							bValid = bValid && checkRegexp( email, /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i, "eg. ui@jquery.com" );
+							bValid = bValid && checkRegexp( password, /^([0-9a-zA-Z])+$/, "Password field only allow : a-z 0-9" );
+							
+							if ( bValid ) {
+								$( "#users tbody" ).append( "<tr>" +
+									"<td>" + name.val() + "</td>" +
+									"<td>" + email.val() + "</td>" +
+									"<td>" + password.val() + "</td>" +
+									"</tr>");
+								$(this).dialog('close');
+							}
+							
+							//marker.setMap(null);
+						},
+						'Cancel' :function(){
+							$(this).dialog('close');
+						}
+					}
+				});
+				
+				$('#map1').gmap('displayStreetView', 'streetview1', {
+					'position': $(marker).get(0).getPosition()
+				});
+				
+			}
+			
+			//Load via ajax request
+			function loadContent(id){
+			    var html = $.ajax({
+			        url: "/getYourDataHere.php?id="+id,
+			        async: false}).responseText;
+			    return html;
+			}
+			
+			function updateTips( t ) {
+				tips.text(t).addClass("ui-state-highlight");
+			  	setTimeout(function() {
+			  		tips.removeClass("ui-state-highlight", 1500);
+			  	}, 500);
+			}
+ 
+		    function checkLength(o, n, min, max) {
+				if (o.val().length > max || o.val().length < min) {
+					o.addClass("ui-state-error");
+					updateTips("Length of " + n + " must be between " + min + " and " + max + ".");
+				    return false;
+				}else{
+				    return true;
+				}
+		    }
+		 
+		    function checkRegexp(o, regexp, n) {
+		    	if ( !( regexp.test( o.val() ) ) ) {
+			        o.addClass("ui-state-error");
+			        updateTips(n);
+			        return false;
+		    	}else{
+		        	return true;
+		    	}
+		    }
+		    
+		    
+		    
+		    
+			$('#map1').gmap({
+				'center' : new google.maps.LatLng(23.5, 121),
+				'zoom': 5, 
+				'disableDefaultUI':false
+			}).bind('init', function(evt, map) {
+				var self = this;
+		
+				$.getJSON('../data/data1.json', function(json) {
+					$.each(json, function(i, v) {
+						var dialogName = "call"+ v.photo_id;
+						//var content = loadContent(v.photo_id);
+						var content = "<div id='infoWindow' class='noscrollbar'><b>"+ v.photo_title + "</b><br/>" +
+									"<font color='red'>"+ v.owner_name +"</font><br/>" + 
+									"<img src='"+ v.photo_file_url +"' height='300' width='300'><br/>" +
+									"<a href='"+ v.owner_url +"'>"+ v.photo_url +"</a><br/><br/>" + 
+									"<a id='"+ dialogName +"' class='label' href='#'>click me</a>" + 
+									"</div>";
+									// onclick='$(\"#dialogWin\").dialog();'
+						
+						//marker generation
+						$('#map1').gmap('addMarker', {
+							'position' : new google.maps.LatLng(v.latitude, v.longitude),
+							'id' : i,
+							'title' : v.photo_id +" "+ v.photo_title,
+							//'icon' : new google.maps.MarkerImage(v.photo_file_url, new google.maps.Size(20, 34), new google.maps.Point(0, 0), new google.maps.Point(300, 300)),
+							//'icon' : 'imgs/daysofweek/daysofweek_mon.png',
+							'content' : content, 
+							'tags' : 'art',
+							'bounds' : false
+						}).mouseover(function() {
+							$('#usersContain').css('backgroundColor', '#FFAAAA');
+						}).mouseout(function() {
+							$('#usersContain').css('backgroundColor', '#FFFFFF');
+						}).click(function() {
+							var mapObj = map;
+							var markerObj = this;
+							
+							//open info window
+							$('#map1').gmap('openInfoWindow', {
+								'content' : $(this)[0].content 
+							}, this, function(){
+								$('.label').click(function(e) {
+									openDialogbyMarker(mapObj, markerObj);
+								});
+							});
+							
+							//image loaded event handler
+						    $('#imgs').load(function () {
+						    	//refresh
+						      	$('#map1').gmap('openInfoWindow', {
+									'content' : content 
+								}, markerObj, function(){
+									$('.label').click(function(e) {
+										//window.console.log("click me : " + $(this).attr("id"));
+										//e.preventDefault();
+										openDialogbyMarker(mapObj, markerObj);
+									});
+								});
+						    }).attr('src', v.photo_file_url);							
+							
+							//iframe load
+						    $('#iframe1').load(function () {
+						    	window.console.log("iframe1 loaded " + $(this).attr("id"));
+						      	
+						    }).attr('src', 'http://mw2.google.com/mw-panoramio/photos/medium/377931.jpg');
+						});
+					});
+					
+					//Marker cluster
+					$('#map1').gmap('set', 'MarkerClusterer', new MarkerClusterer(map, $(self).gmap('get', 'markers')));
+					// $('#map1').gmap('get', 'MarkerClusterer').callingSomeMethod();
+				});
+				
+				
+				
+			});
+			
+		   	var map = $('#map1').gmap('get', 'map');
+			$(map).click(function(event){
+				//alert("map click ->"+ this);
+				
+				//add new marker on map
+				var marker_Click = new google.maps.Marker({
+	                map: map,
+	                position: event.latLng
+	            });
+				
+			});
+			
+			$(map).addEventListener('zoom_changed', function() {
+				//alert("map zoom changed ->"+ this);
+			});
+			
+			$(map).addEventListener('bounds_changed', function() {
+				window.console.log("bounds changed : " + this.getBounds());
+	
+			});
+			
+			$(map).addEventListener('idle', function() {
+				window.console.log("idle : " + this.getBounds());
+				
+				//runs code 500ms after the event fires
+				var timer;
+			    return function() {
+			        clearTimeout(timer);
+			        timer = setTimeout(function() {
+			        	loadData(this.getBounds());
+			        }, 500);
+			    }
+			});
+		
+			$('#map1').gmap({'callback':function() {
+		        var self = this;
+		        /*
+		        $.getJSON( 'data1.json', function(data) { 
+		        	$.each( data.photos, function(i, m) { 
+				        self.addMarker({ 
+				        	'position': new google.maps.LatLng(m.latitude, m.longitude), 
+				        	'bounds': false,
+				        	'id': m.owner_id
+				        	}).click(function() {
+				                self.openInfoWindow({ 
+				                	'content': m.photo_title 
+				                }, this);
+				        });
+				        
+			        });
+				});
+			    */
+			}});
+			
+			
+			/**
+			 * Event handler 
+			 */
+			$("#createUser").button().click(function() {
+				alert('create user clicked');
+        		//$("#dialogWin").dialog( "open" );
+     		});
+     		
+
+			
+		});
+	</script>
+</head>
+<body>
+	<noscript>No javascript support</noscript>
+	<div id="map1" class="map">
+	</div>
+	
+	<div id="usersContain" class="ui-widget">
+		<h1>Existing Users:</h1>
+		<table id="users" class="ui-widget ui-widget-content">
+			<thead>
+				<tr class="ui-widget-header ">
+					<th>Name</th>
+					<th>Email</th>
+					<th>Password</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>zhengku</td>
+					<td>zhengku@gmail.com</td>
+					<td>123456</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<button id="createUser">Create new user</button>
+	</div>
+	
+	<img id="imgs" class='nodisplay' src="" />
+	<iframe id="iframe1" class="nodisplay" src=""></iframe>
+	<div id="dialogWin" class='nodisplay'>
+		<p class="validateTips">
+			<span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;">
+			</span>
+			All form fields are required.
+		</p>
+		<form>
+  			 <fieldset>
+				<label for="name">Name</label>
+				<input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all">
+				<label for="email">Email</label>
+				<input type="text" name="email" id="email" value="" class="text ui-widget-content ui-corner-all">
+				<label for="password">Password</label>
+				<input type="password" name="password" id="password" value="" class="text ui-widget-content ui-corner-all">
+			</fieldset>
+  		</form>
+  		<div id="streetview1">
+		</div>
+	</div>
+
+</body>
+</html>

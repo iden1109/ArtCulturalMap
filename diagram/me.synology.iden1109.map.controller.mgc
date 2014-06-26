@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassDiagram>
+    <Class name="me.synology.iden1109.hbase.HBase" x="551" y="129">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="me.synology.iden1109.hbase.HBaseBean"/>
+        <Communication destinationClassName="me.synology.iden1109.hbase.HBaseBean"/>
+    </Class>
+    <Class name="me.synology.iden1109.map.controller.QueryEventIndex"
+        x="593" y="191">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="me.synology.iden1109.hbase.HBase"/>
+        <Communication destinationClassName="me.synology.iden1109.hbase.HBaseBean"/>
+    </Class>
+    <Class name="me.synology.iden1109.map.controller.Query" x="19" y="191">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="me.synology.iden1109.hbase.HBase"/>
+        <Communication destinationClassName="me.synology.iden1109.hbase.HBaseBean"/>
+    </Class>
+    <Class name="me.synology.iden1109.map.controller.GetAddress" x="629" y="354">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Communication destinationClassName="me.synology.iden1109.map.controller.QueryEventIndex"/>
+    </Class>
+    <Class name="me.synology.iden1109.map.controller.GetJSON" x="220" y="348">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Communication destinationClassName="me.synology.iden1109.map.controller.QueryEventIndex"/>
+        <Communication destinationClassName="me.synology.iden1109.map.controller.Query"/>
+    </Class>
+    <Class name="me.synology.iden1109.hbase.HBaseBean" x="136" y="1">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+</ClassDiagram>

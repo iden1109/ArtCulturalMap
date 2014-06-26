@@ -1,0 +1,7 @@
+http://data.gov.tw/iisi/logaccess?dataUrl=http%3A%2F%2Fcloud.culture.tw%2Ffrontsite%2Ftrans%2FSearchShowAction.do%3Fmethod%3DdoFindTypeX%26category%3D6&type=XML&nid=6012
+http://data.gov.tw/iisi/logaccess?dataUrl=http%3A%2F%2Fcloud.culture.tw%2Ffrontsite%2Ftrans%2FSearchShowAction.do%3Fmethod%3DdoFindTypeX%26category%3D1&type=XML&nid=6017
+http://data.gov.tw/iisi/logaccess?dataUrl=http%3A%2F%2Fcloud.culture.tw%2Ffrontsite%2Ftrans%2FSearchShowAction.do%3Fmethod%3DdoFindTypeX%26category%3D2&type=XML&nid=6016
+http://data.gov.tw/iisi/logaccess?dataUrl=http%3A%2F%2Fcloud.culture.tw%2Ffrontsite%2Ftrans%2FSearchShowAction.do%3Fmethod%3DdoFindTypeX%26category%3D3&type=XML&nid=6015
+http://data.gov.tw/iisi/logaccess?dataUrl=http%3A%2F%2Fcloud.culture.tw%2Ffrontsite%2Ftrans%2FSearchShowAction.do%3Fmethod%3DdoFindTypeX%26category%3D4&type=XML&nid=6014
+http://data.gov.tw/iisi/logaccess?dataUrl=http%3A%2F%2Fcloud.culture.tw%2Ffrontsite%2Ftrans%2FSearchShowAction.do%3Fmethod%3DdoFindTypeX%26category%3D17&type=XML&nid=6013
+http://data.gov.tw/iisi/logaccess?dataUrl=http%3A%2F%2Fcloud.culture.tw%2Ffrontsite%2Ftrans%2FSearchShowAction.do%3Fmethod%3DdoFindTypeX%26category%3D15&type=XML&nid=6018

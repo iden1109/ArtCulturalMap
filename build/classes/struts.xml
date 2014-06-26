@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+   "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+   "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+  <constant name="struts.devMode" value="true" />
+  <constant name="struts.action.extension" value="do" />
+   
+  <package name="ajax" extends="json-default">
+    <action name="sug" class="me.synology.iden1109.ajax.Sug">
+   	  <result type="json"></result>
+   	</action>
+   	<action name="getjson" class="me.synology.iden1109.map.controller.GetJSON">
+   	  <result type="json"></result>
+   	</action>  
+   	<action name="getaddress" class="me.synology.iden1109.map.controller.GetAddress">
+   	  <result type="json"></result>
+   	</action>
+  </package>
+</struts>
