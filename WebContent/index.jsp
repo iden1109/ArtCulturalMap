@@ -12,6 +12,7 @@
 
 <title>Art Cultural Map</title>
 
+<link rel="stylesheet" href="css/style.css" />
 <link rel="stylesheet", href="css/bootstrap/2.3.2/bootstrap.css" />
 <link rel="stylesheet", href="css/bootstrap/2.3.2/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/ui-lightness/jquery-ui.css" />
@@ -27,6 +28,9 @@
 			-ms-interpolation-mode:bicubic;
 		}
 		.label1{
+			font-size:16px; background:#FF6666; color:white; padding:.25em
+		}
+		.label2{
 			font-size:16px; background:#FF6666; color:white; padding:.25em
 		}
 		.noscrollbar {
@@ -125,6 +129,9 @@
 		* html .ui-autocomplete {
 			height: 600px;
 		}
+		#alist li { padding:10px; color:#000000; } 
+		#alist li:hover { background:#555; color:#fff;}
+		a:hover { background:#555; color:#fff;} 
     </style>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3TI_aOEP-JWo7bEI4NzLaU8U_BofxJpk&sensor=true" type="text/javascript"></script>
@@ -135,6 +142,7 @@
 <script src="script/jqueryuimap/jquery.ui.map.extensions.js" type="text/javascript"></script>
 <script src="script/jqueryuimap/jquery.ui.map.services.js" type="text/javascript"></script>
 <script src="script/jqueryuimap/jquery.ui.map.overlays.js" type="text/javascript"></script>
+<script type="text/javascript" src="script/tinybox.js"></script>
 
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -182,12 +190,16 @@
 		};
 		warning.setup();
 		
-		
 		var startLatLon = new google.maps.LatLng(24.135, 120.67);
 		if (navigator.geolocation) {
+			warning.show("系統定位中...");
 			navigator.geolocation.getCurrentPosition(
 				function(position, status){
 					startLatLon = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+					//window.console.log("geolocation successful : " + startLatLon);
+					_map.panTo(startLatLon);
+					_map.setZoom(15);
+					warning.showperiod("定位完成");
 				},
 				function(error){
 					var errorTypes={
@@ -197,6 +209,7 @@
 						3:"位置查詢逾時"
 					};
 					warning.showperiod(errorTypes[error.code]);
+					//window.console.log("geolocation error : " + errorTypes[error.code]);
 				}
 			);
 		} else {
@@ -209,6 +222,7 @@
 			'zoom':15,
 			'disableDefaultUI':false
 		}).bind('init', function(evt, map) {
+			//window.console.log("map init : " + evt);
 		});
 		
 		
@@ -251,7 +265,7 @@
 					var content = "<div id='infoWindow' style='width:550px; height:600px'>"+
 						"<h4>"+ v.title + "</h4>"+
 						"<p style='color:red;'>"+v.startDate+" ~ "+v.endDate +"&nbsp;&nbsp;"+ v.locationName+"&nbsp;[ "+v.location+" ]</p>"+
-						"<div style='word-break: break-all;word-wrap: break-word;'><p>"+ v.descriptionFilterHtml +"</p></div>"+
+						"<div style='word-break: break-all;word-wrap: break-word;'><p>"+ replaceAll('  ', '<p>', v.descriptionFilterHtml) +"</p></div>"+
 						showTable+
 						"<span class='label label-warning'>折扣活動</span>&nbsp;"+ replaceAll(' ', '<p>', v.discountInfo) +"<br/>" + 
 						"<span class='label label-success'>資料來源</span>&nbsp;"+(v.sourceWebPromote?"<a href='"+ v.sourceWebPromote +"'>"+ v.sourceWebName +"</a><br/>": v.sourceWebName +"<br/>") + 
@@ -261,10 +275,10 @@
 						"<span class='label label-info'>藝文網址</span>&nbsp;<a href='"+ (v.webSales ? v.webSales : v.sourceWebPromote) +"' target='_blank'>"+ (v.webSales ? v.webSales : v.sourceWebPromote) +"</a><br/>" + 
 						(v.webSales || v.sourceWebPromote ?"<div><iframe width='100%' height='520px' src='"+(v.webSales ? v.webSales : v.sourceWebPromote)+"' frameborder='0'></iframe></div>" : "")+
 						"<p></p>"+
-						//"<a id='"+ v.UID +"' class='label1' href='#'>More..</a><br/>" +
+						"<a id='"+ v.UID +"' class='label1' href='#'>More..</a><br/>" +
 						"</div>";
 				
-					if(!_markers[v.UID]){//show not duplicated
+					if(!_markers[v.UID]){//It is not duplicated to show
 						_markers[v.UID] = true;
 						_refresh = true;
 						//marker generation
@@ -278,11 +292,12 @@
 							'bounds':false,
 							'animation':google.maps.Animation.DROP, 
 							'time':v.startDate+" ~ "+v.endDate,
-							'location':v.locationName
+							'location':v.locationName,
+							'uid':v.UID
 						}).mouseover(function() {
-							//
+							//window.console.log("mouse over : " + $(this).attr("id"));
 						}).mouseout(function() {
-							//
+							//window.console.log("mouse out : " + $(this).attr("id"));
 						}).click(function() {// marker clicked
 							var markerObj = this;
 							
@@ -292,7 +307,7 @@
 								'maxWidth':550,
 							}, this, function(){
 								
-								$(".label1").click(function(e) {
+								$("a.label1").click(function(e) {
 									//window.console.log("click me : " + $(this).attr("id"));
 									openDialogbyMarker(markerObj);
 								});
@@ -304,33 +319,46 @@
 							//window.console.log("marker each : " +$(this).get(0).getPosition());
 							_markersArray.push(markObj.get(0));
 							
-							// ingest performing activities list
-							//performing by name
+							// ingest activities list
+							// by name
 							$("<li />").html("<h4>"+ highlighting($(this).attr("location"), $("#query").val()) +"</h4>"+ highlighting($(this).attr("title"), $("#query").val()) +"<br/>"+ $(this).attr("time") ) 
-								.click(function(){ 
-									_map.panTo(markObj.get(0).getPosition());
-									_map.setZoom(18);
-									google.maps.event.trigger(markObj.get(0), 'click');
+								.click(function(){
+									event.preventDefault();
+									markerClick(markObj.get(0));
+									//TINY.box.hide();
 					  			}).appendTo("#list1");
-							//performing by date
+							// by date
 							$("<li />").html("<h4>"+$(this).attr("time") +"</h4>"+ highlighting($(this).attr("title"), $("#query").val()) +"<br/>"+ highlighting($(this).attr("location"), $("#query").val()) ) 
-								.click(function(){ 
-									_map.panTo(markObj.get(0).getPosition());
-									_map.setZoom(16);
-									google.maps.event.trigger(markObj.get(0), 'click');
+								.click(function(){
+									event.preventDefault();
+									markerClick(markObj.get(0));
+									//TINY.box.hide();
 					  			}).appendTo("#list2");
 						});
 					}
 					
 				});
 				
-				
+	
 				if(_markerCluster && _refresh){
 					_markerCluster.clearMarkers();
 					_markerCluster = new MarkerClusterer(_map, _markersArray,{
 						'maxZoom':15,
 						'gridSize':40
 					});
+					
+					google.maps.event.addListener(_markerCluster, 'clusterclick', function(cc) {
+						//window.console.log("Number of managed markers in cluster: " + cc.getSize());
+						var m = cc.getMarkers();
+						$("#alist").empty();
+						$.each(m, function(i, v) {
+							//window.console.log(m[i]);
+							$("<li />").html(m[i]["time"]+ " <a href='#' onclick=markerClickIdx('"+m[i]['uid']+"');>" + m[i]["title"] + "</a>")
+					  			.appendTo("#alist");
+						});
+						TINY.box.show({html:$("#alistdiv").html(), animate:true, opacity:20});
+					});
+					
 				}
 				sortList();
 				
@@ -346,6 +374,7 @@
 						warning.showperiod("藝文活動已過期或找不到藝文");
 					}
 				}
+				
 			})
 			.fail(function(jqxhr, textStatus, error ) {
 				//window.console.log(textStatus + ", " + error);
@@ -356,6 +385,19 @@
 				}
 			});
 		}
+		
+		
+		ClusterIcon.prototype.triggerClusterClick = function() {
+			var markerClusterer = this.cluster_.getMarkerClusterer();
+			// Trigger the clusterclick event.
+			google.maps.event.trigger(markerClusterer, 'clusterclick', this.cluster_);
+			
+			if (markerClusterer.isZoomOnClick()) {
+				this.map_.fitBounds(this.cluster_.getBounds()); // Zoom into the cluster.
+				//this.map_.setZoom(markerClusterer.getMaxZoom()+1); // modified zoom in function
+			}
+		};
+		
 		
 		
 		// Map 'idle' event handler
@@ -643,6 +685,23 @@
 			}
 		}
 		
+		function markerClick(markObj){
+			_map.panTo(markObj.getPosition());
+			_map.setZoom(16);
+			google.maps.event.trigger(markObj, 'click');
+		}
+		
+		window.markerClickIdx = function(uid){
+			$.each(_markersArray, function(i, v) {
+				if(_markersArray[i]['uid'] == uid){
+					//window.console.log("markerClickIdx match --> "+_markersArray[i]['title']);
+					google.maps.event.trigger(_markersArray[i], "click");
+				}
+			});
+			
+		};
+
+		
 	});
 </script>
 </head>
@@ -704,6 +763,9 @@
 			<ul id="list2"></ul>
 		</div>
 	</div>
+	<div id="alistdiv" class='nodisplay'>
+		<ul id="alist"></ul>
+	</div>
 	<div id="dialogWin" class='nodisplay'>
 		<form>
   			 <fieldset>
@@ -717,5 +779,6 @@
   		</form>
 	</div>
 	<div id="dialog1" title="訊息"></div>
+	
 </body>
 </html>
